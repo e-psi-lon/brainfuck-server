@@ -1,8 +1,12 @@
-# Brainfuck cheat sheet
+# Brainfuck Server
 
-## Data manipulation
+I'll do a real doc later
 
-### Moving data 
+## Cheat Sheet
+
+### Data manipulation
+
+#### Moving data 
 
 You can move data between cells in Brainfuck by using loops to decrement one cell while incrementing another. The following examples shows how to move data from cell A to cell B. Those examples assumes that the pointer is initially at cell A. When moving data, you'll move the pointer in the direction of the target (i.e. left if moving to a lower cell, right if moving to a higher cell).
 
@@ -25,7 +29,7 @@ Ready to paste code :
 > [!IMPORTANT]
 > In the previous example `>` and `<` need to be repeated according to the distance between cells A and B. For example, if A is cell n°1 and B is cell n°3, you would use 2 `>` or `<` commands to move between them. Add as many `>` or `<` commands as needed to reach the target cell.
 
-### Copying data
+#### Copying data
 You can copy data from one cell to another by using a similar approach to moving data, but you need to ensure that the source cell is not cleared. To do so, you can use a temporary C cell to hold the value during the copy process. The example below assumes that the pointer is initially at cell A and you want to copy its value to cell B.
 
 ```bf
@@ -71,7 +75,7 @@ This is pretty simple and straightforward but it's worth mentioning. You just ha
 ```
 
 
-## Syscalls (Dialect-specific)
+### Syscalls (Dialect-specific)
 
 The interpreter used and defined in the [interpreter](interpreter/) supports executing Linux x86-64 syscalls through an extra command `%` that executes a syscall.
 It requires to provide informations about the syscall and its arguments in at least 5 cells as follows:
@@ -86,9 +90,9 @@ Examples can be found in the [examples](interpreter/examples/) directory given b
 
 
 
-## Project specific conventions
+### Project specific conventions
 
-### Formatting
+#### Code Formatting 
 
 To make the code more readable, you can use the following formatting conventions:
 - Group `+` 5 by 5 with at most 2 groups per line :
