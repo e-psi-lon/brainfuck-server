@@ -2,8 +2,16 @@
   "scopeName": "source.pseudo",
   "patterns": [
     {
+      "name": "comment.line.pseudo",
+      "match": "#.*$"
+    },
+    {
+      "name": "markup.heading.pseudo",
+      "match": "^#{2,3}\\s+.*$"
+    },
+    {
       "name": "keyword.control.pseudo",
-      "match": "\\b(SET|MOV|AT|WITH|while|endwhile)\\b"
+      "match": "\\b(INIT|SET|MOV|PARAM|AT|WITH|while|endwhile)\\b"
     },
     {
       "name": "entity.name.function.syscall.pseudo",
@@ -11,42 +19,58 @@
     },
     {
       "name": "punctuation.parenthesis.syscall.pseudo",
-      "match": "(?<=SYS_[A-Z_]+)\\(|\\)"
+      "match": "(?<=SYS_[A-Z_]+)\\s*\\(|\\)(?=\\s*$|\\s)"
     },
     {
-      "name": "variable.name.pseudo",
-      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\s*"
+      "name": "entity.name.type.pseudo",
+      "match": "\\b(INT|STRUCT|PTR)\\b"
     },
     {
-      "name": "punctuation.parenthesis.variable.pseudo",
-      "match": "\\("
+      "name": "constant.numeric.cell.range.pseudo",
+      "match": "\\bC[0-9]+\\.\\.C[0-9]+\\b"
     },
     {
       "name": "constant.numeric.cell.pseudo",
       "match": "\\bC[0-9]+\\b"
     },
     {
-      "name": "constant.numeric.value.pseudo",
-      "match": "\\b(0x[0-9A-Fa-f]+|[0-9]+)\\b"
+      "name": "keyword.control.hex.prefix.pseudo",
+      "match": "\\b0(x|b|o)(?=[0-9A-Fa-f]+\\b)"
     },
     {
-      "name": "constant.numeric.range.pseudo",
-      "match": "\\bC[0-9]+\\.\\.C[0-9]+\\b"
+      "name": "constant.numeric.hex.pseudo",
+      "match": "(?<=0x)[0-9A-Fa-f]+\\b"
     },
     {
-      "name": "comment.line.pseudo",
-      "match": "#.*$"
+      "name": "constant.numeric.decimal.pseudo",
+      "match": "\\b[0-9]+\\b"
     },
     {
-      "name": "punctuation.definition.block.pseudo",
-      "match": "[{}\\[\\]]"
+      "name": "variable.declaration.pseudo",
+      "match": "^\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*\\((?![C0-9])[^)]+\\)\\s*(:.*)?$"
     },
     {
       "name": "variable.field.pseudo",
       "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\s*:"
     },
     {
-      "name": "variable.defined.pseudo",
+      "name": "punctuation.definition.block.pseudo",
+      "match": "[{}\\[\\]()]"
+    },
+    {
+      "name": "punctuation.separator.pseudo",
+      "match": "[,;]"
+    },
+    {
+      "name": "keyword.operator.assignment.pseudo",
+      "match": "=|\\+=|\\-="
+    },
+    {
+      "name": "variable.parameter.pseudo",
+      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*(?=\\s*\\()"
+    },
+    {
+      "name": "variable.other.pseudo",
       "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
     }
   ]
