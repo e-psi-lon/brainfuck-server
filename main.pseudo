@@ -1,0 +1,47 @@
+# Initialize the server 
+
+## Setup socket
+
+SYS_SOCKET AT C0 WITH 3
+AF_INET (C5) =  0
+SOCK_STREAM (C8) = 1
+SET C11 0
+
+SYS_SOCKET(AF_INET, SOCK_STREAM, C11)
+
+MOV C0 C5						# C0 is the socket file descriptor and C5
+socket_fd (C5)
+
+SYS_SOCKET_OPT AT C5 WITH 4
+SOL_SOCKET (C8) = 1
+SO_REUSEADDR (C11) = 2
+
+
+SYS_SOCKET_OPT(C5, SOL_SOCKET, SO_REUSEADDR, 1, 4)
+
+## Bind the socket
+
+### Set a size for the sockaddr structure
+SET C16 15						# Size of sockaddr structure (15 bytes)
+
+### sockaddr definition
+sockaddr (C17, C32) = {
+    sa_family: 2,				# AF_INET
+    sa_data: [
+        4000					# In two bytes (big-endian) 0x0F and 0xA0 (15*256 + 160 = 4000)
+        0, 0, 0, 0,				# IP 0.0.0.0 (INADDR_ANY)
+        0, 0, 0, 0, 0, 0, 0, 0	# Padding
+    ]
+}
+
+### SET sockaddr
+SET C17 2
+SET C18 0x0F
+SET C19 0xA0
+SET C20..C32 0					# No change needed for those cells since they are already 0
+
+SYS_BIND(C5, sockaddr, 16)
+
+## Start the loop
+
+SYS_LISTEN(C5, 5)				# Listen on the socket with a backlog of 5
