@@ -1,0 +1,30 @@
+{
+  "name": "pseudo-code-syntax",
+  "displayName": "Pseudo Code Syntax",
+  "description": "Syntax highlighting for Pseudo Code used in the Brainfuck server.",
+  "version": "0.0.4",
+  "publisher": "e-psi-lon",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "pseudo",
+        "aliases": ["Pseudo Code"],
+        "extensions": [".pseudo"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "pseudo",
+        "scopeName": "source.pseudo",
+        "path": "./syntaxes/pseudo.tmLanguage.json"
+      }
+    ]
+  }
+}

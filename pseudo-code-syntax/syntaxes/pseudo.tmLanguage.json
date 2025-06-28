@@ -1,0 +1,53 @@
+{
+  "scopeName": "source.pseudo",
+  "patterns": [
+    {
+      "name": "keyword.control.pseudo",
+      "match": "\\b(SET|MOV|AT|WITH|while|endwhile)\\b"
+    },
+    {
+      "name": "entity.name.function.syscall.pseudo",
+      "match": "\\bSYS_[A-Z_]+\\b"
+    },
+    {
+      "name": "punctuation.parenthesis.syscall.pseudo",
+      "match": "(?<=SYS_[A-Z_]+)\\(|\\)"
+    },
+    {
+      "name": "variable.name.pseudo",
+      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\s*"
+    },
+    {
+      "name": "punctuation.parenthesis.variable.pseudo",
+      "match": "\\("
+    },
+    {
+      "name": "constant.numeric.cell.pseudo",
+      "match": "\\bC[0-9]+\\b"
+    },
+    {
+      "name": "constant.numeric.value.pseudo",
+      "match": "\\b(0x[0-9A-Fa-f]+|[0-9]+)\\b"
+    },
+    {
+      "name": "constant.numeric.range.pseudo",
+      "match": "\\bC[0-9]+\\.\\.C[0-9]+\\b"
+    },
+    {
+      "name": "comment.line.pseudo",
+      "match": "#.*$"
+    },
+    {
+      "name": "punctuation.definition.block.pseudo",
+      "match": "[{}\\[\\]]"
+    },
+    {
+      "name": "variable.field.pseudo",
+      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\s*:"
+    },
+    {
+      "name": "variable.defined.pseudo",
+      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+    }
+  ]
+}
