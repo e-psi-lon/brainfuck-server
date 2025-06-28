@@ -2,46 +2,69 @@
 
 ## Setup socket
 
-SYS_SOCKET AT C0 WITH 3
-AF_INET (C5) =  0
-SOCK_STREAM (C8) = 1
-SET C11 0
+INIT SYS_SOCKET AT C0 WITH 3
 
-SYS_SOCKET(AF_INET, SOCK_STREAM, C11)
+PARAM AF_INET (C2, C4): INT =  0
+PARAM SOCK_STREAM (C5, C7): INT = 1
+SET C10 0
 
-MOV C0 C5						# C0 is the socket file descriptor and C5
-socket_fd (C5)
+SYS_SOCKET(AF_INET, SOCK_STREAM, C10)
 
-SYS_SOCKET_OPT AT C5 WITH 4
-SOL_SOCKET (C8) = 1
-SO_REUSEADDR (C11) = 2
+MOV C0 C4						# C0 is the socket file descriptor and C5
+socket_fd (C4)
 
 
-SYS_SOCKET_OPT(C5, SOL_SOCKET, SO_REUSEADDR, 1, 4)
+INIT SYS_SOCKET_OPT AT C0 WITH 4
+
+PARAM SOL_SOCKET (C5, C7): INT = 1
+PARAM SO_REUSEADDR (C8, C10): INT = 2
+PARAM option_value (C13, C15): INT = 1
+PARAM option_size (C16, C18): INT = 4
+
+SYS_SOCKET_OPT(socket_fd, SOL_SOCKET, SO_REUSEADDR, option_value, option_size)
 
 ## Bind the socket
 
-### Set a size for the sockaddr structure
-SET C16 15						# Size of sockaddr structure (15 bytes)
+INIT SYS_BIND AT C0 WITH 3
 
 ### sockaddr definition
-sockaddr (C17, C32) = {
+PARAM sockaddr (C5, C7..C22): STRUCT[16] = {
     sa_family: 2,				# AF_INET
     sa_data: [
-        4000					# In two bytes (big-endian) 0x0F and 0xA0 (15*256 + 160 = 4000)
+        4000,					# In two bytes (big-endian) 0x0F and 0xA0 (15*256 + 160 = 4000)
         0, 0, 0, 0,				# IP 0.0.0.0 (INADDR_ANY)
-        0, 0, 0, 0, 0, 0, 0, 0	# Padding
+        0, 0, 0, 0,             # Padding (part 1.)
+        0, 0, 0, 0              # Padding (part 2.)
     ]
 }
 
 ### SET sockaddr
-SET C17 2
-SET C18 0x0F
-SET C19 0xA0
-SET C20..C32 0					# No change needed for those cells since they are already 0
+SET C7 0
+SET C8 2						# AF_INET (big-endian 0x0002)
+SET C9 0x0F
+SET C10 0xA0
+SET C11..C22 0					# No change normally needed for those cells since they are already 0
 
-SYS_BIND(C5, sockaddr, 16)
+PARAM sockaddr_size (C23, C25): INT = 16	# Size of sockaddr structure
+
+SYS_BIND(socket_fd, sockaddr, sockaddr_size)
 
 ## Start the loop
 
-SYS_LISTEN(C5, 5)				# Listen on the socket with a backlog of 5
+# Update the socket_fd to C5.
+MOV socket_fd C5
+
+socket_fd (C5)
+
+SET C0 1						# Use C0 to create a non-zero value for the loop condition
+
+PARAM backlog (C6, C8): INT = 2		# Number of connections to queue
+
+while:							# Start the loop
+	INIT SYS_LISTEN AT C1 WITH 2
+
+
+	SYS_LISTEN(socket_fd, backlog)			# Start listening on the socket
+
+endwhile
+
