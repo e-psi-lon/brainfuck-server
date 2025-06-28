@@ -47,7 +47,7 @@ Execute the syscall
 % 
 
 
-Move the output of the sysccall from cell 0 to cell 5 (content for the scoketfd argument)
+Move the output of the syscall from cell 0 to cell 5 (content for the socketfd argument)
 >>>>>[-]<<<<<[->>>>>+<<<<<]
 
 setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen)
