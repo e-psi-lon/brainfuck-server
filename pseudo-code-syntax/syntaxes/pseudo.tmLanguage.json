@@ -46,6 +46,10 @@
       "match": "\\b[0-9]+\\b"
     },
     {
+      "name": "keyword.operator.reference.pseudo",
+      "match": "&(?=[a-zA-Z_][a-zA-Z0-9_]*\\b|C[0-9]+\\b)"
+    },
+    {
       "name": "variable.declaration.pseudo",
       "match": "^\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*\\((?![C0-9])[^)]+\\)\\s*(:.*)?$"
     },

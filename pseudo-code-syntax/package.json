@@ -1,15 +1,17 @@
 {
   "name": "pseudo-code-syntax",
   "displayName": "Pseudo Code Syntax",
-  "description": "Syntax highlighting for Pseudo Code used in the Brainfuck server.",
-  "version": "0.1.0",
+  "description": "Syntax highlighting and validation for Pseudo Code used in the Brainfuck server.",
+  "version": "0.2.6",
   "publisher": "e-psi-lon",
   "engines": {
     "vscode": "^1.75.0"
   },
   "categories": [
-    "Programming Languages"
+    "Programming Languages",
+    "Linters"
   ],
+  "main": "./out/extension.js",
   "contributes": {
     "languages": [
       {
@@ -25,6 +27,94 @@
         "scopeName": "source.pseudo",
         "path": "./syntaxes/pseudo.tmLanguage.json"
       }
-    ]
-  }
+    ],
+    "commands": [
+      {
+        "command": "pseudo.showCellMap",
+        "title": "Show Cell Allocation Map",
+        "category": "Pseudo"
+      },
+      {
+        "command": "pseudo.validateFile",
+        "title": "Validate Current File",
+        "category": "Pseudo"
+      },
+      {
+        "command": "pseudo.exportToBrainfuck",
+        "title": "Export to Brainfuck (Template)",
+        "category": "Pseudo"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceExtname == .pseudo",
+          "command": "pseudo.showCellMap",
+          "group": "pseudo"
+        },
+        {
+          "when": "resourceExtname == .pseudo",
+          "command": "pseudo.validateFile",
+          "group": "pseudo"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "pseudo.showCellMap",
+          "when": "resourceExtname == .pseudo"
+        },
+        {
+          "command": "pseudo.validateFile",
+          "when": "resourceExtname == .pseudo"
+        },
+        {
+          "command": "pseudo.exportToBrainfuck",
+          "when": "resourceExtname == .pseudo"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "pseudo.showCellMap",
+        "key": "ctrl+shift+m",
+        "when": "resourceExtname == .pseudo"
+      }
+    ],
+    "configuration": {
+      "title": "Pseudo Code",
+      "properties": {
+        "pseudo.validation.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable real-time validation of pseudo code"
+        },
+        "pseudo.validation.maxCells": {
+          "type": "number",
+          "default": 30000,
+          "description": "Maximum number of cells available in Brainfuck memory"
+        },
+        "pseudo.cellMap.showInProblems": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show cell allocation conflicts in Problems panel"
+        },
+        "pseudo.export.includeComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include comments in exported Brainfuck code"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^4.9.0"
+  },
+  "dependencies": {}
 }
