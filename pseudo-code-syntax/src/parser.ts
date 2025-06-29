@@ -21,18 +21,24 @@ export class PseudoCodeParser {
                     // Handle multi-line constructs like while loops
                     if (node.type === 'while') {
                         const whileNode = node as WhileNode;
-                        i++;
                         whileNode.body = [];
+                        i++; // Move past the 'while:' line
                         
                         while (i < lines.length) {
-                            const bodyLine = lines[i].trim();
-                            if (bodyLine === 'endwhile') break;
-                            if (bodyLine && !bodyLine.startsWith('#')) {
+                            const bodyLine = this.removeInlineComments(lines[i].trim());
+                            if (bodyLine === 'endwhile') {
+                                i++; // Move past the 'endwhile' line
+                                break;
+                            }
+                            if (bodyLine && !bodyLine.startsWith('#') && !bodyLine.startsWith('##')) {
                                 const bodyNode = this.parseLine(bodyLine, i);
                                 if (bodyNode) whileNode.body.push(bodyNode);
                             }
                             i++;
                         }
+                        // Don't increment i again at the end since we've already positioned it correctly
+                        ast.push(node);
+                        continue; // Skip the final i++ at the end of the main loop
                     }
                     ast.push(node);
                 }
