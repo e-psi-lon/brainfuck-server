@@ -9,10 +9,10 @@ This document explains the pseudo code for the Brainfuck server in the [main.bf]
 - **SYSCALLs**: Represented by `SYS_` prefixed functions with arguments in parentheses.
   - Example: `SYS_WRITE(C0, C1, C2)`
 
-- **Defining SYSCALL Numbers**: Use `INIT SYS_SYSCALL_NAME AT Cn WITH m`.
+- **Defining SYSCALL Numbers**: Use `INIT SYS_SYSCALL_NAME Cn m`.
   - `Cn`: Cell where the syscall number is stored.
   - `m`: Number of arguments the syscall takes (stored at `Cn+1`).
-  - Example: `INIT SYS_SOCKET AT C0 WITH 3`
+  - Example: `INIT SYS_SOCKET C0 3`
 
 - **Memory Cells**: Represented by `C` followed by a number (e.g., `C0`, `C1`).
 
