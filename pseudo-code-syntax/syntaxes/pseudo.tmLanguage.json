@@ -2,80 +2,229 @@
   "scopeName": "source.pseudo",
   "patterns": [
     {
-      "name": "comment.line.pseudo",
-      "match": "#.*$"
+      "include": "#comments"
     },
     {
-      "name": "markup.heading.pseudo",
-      "match": "^#{2,3}\\s+.*$"
+      "include": "#syscalls"
     },
     {
-      "name": "keyword.control.pseudo",
-      "match": "\\b(INIT|SET|MOV|PARAM|AT|WITH|while|endwhile)\\b"
+      "include": "#while-loops"
     },
     {
-      "name": "entity.name.function.syscall.pseudo",
-      "match": "\\bSYS_[A-Z_]+\\b"
+      "include": "#commands"
     },
     {
-      "name": "punctuation.parenthesis.syscall.pseudo",
-      "match": "(?<=SYS_[A-Z_]+)\\s*\\(|\\)(?=\\s*$|\\s)"
+      "include": "#variables"
     },
     {
-      "name": "entity.name.type.pseudo",
-      "match": "\\b(INT|STRUCT|PTR)\\b"
+      "include": "#data-types"
     },
     {
-      "name": "constant.numeric.cell.range.pseudo",
-      "match": "\\bC[0-9]+\\.\\.C[0-9]+\\b"
+      "include": "#cell-references"
     },
     {
-      "name": "constant.numeric.cell.pseudo",
-      "match": "\\bC[0-9]+\\b"
+      "include": "#structures"
     },
     {
-      "name": "keyword.control.hex.prefix.pseudo",
-      "match": "\\b0(x|b|o)(?=[0-9A-Fa-f]+\\b)"
+      "include": "#numbers"
     },
     {
-      "name": "constant.numeric.hex.pseudo",
-      "match": "(?<=0x)[0-9A-Fa-f]+\\b"
+      "include": "#strings"
     },
     {
-      "name": "constant.numeric.decimal.pseudo",
-      "match": "\\b[0-9]+\\b"
-    },
-    {
-      "name": "keyword.operator.reference.pseudo",
-      "match": "&(?=[a-zA-Z_][a-zA-Z0-9_]*\\b|C[0-9]+\\b)"
-    },
-    {
-      "name": "variable.declaration.pseudo",
-      "match": "^\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*\\((?![C0-9])[^)]+\\)\\s*(:.*)?$"
-    },
-    {
-      "name": "variable.field.pseudo",
-      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\s*:"
-    },
-    {
-      "name": "punctuation.definition.block.pseudo",
-      "match": "[{}\\[\\]()]"
-    },
-    {
-      "name": "punctuation.separator.pseudo",
-      "match": "[,;]"
-    },
-    {
-      "name": "keyword.operator.assignment.pseudo",
-      "match": "=|\\+=|\\-="
-    },
-    {
-      "name": "variable.parameter.pseudo",
-      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*(?=\\s*\\()"
-    },
-    {
-      "name": "variable.other.pseudo",
-      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+      "include": "#equals"
     }
-  ]
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.hash.pseudo",
+          "match": "#.*$"
+        }
+      ]
+    },
+    "equals": {
+      "patterns": [
+        {
+          "name": "keyword.operator.assignment.equals.pseudo",
+          "match": "="
+        }
+      ]
+    },
+    "while-loops": {
+      "patterns": [
+        {
+          "name": "keyword.control.while.pseudo",
+          "match": "\\b(while)\\b"
+        },
+        {
+          "name": "keyword.control.endwhile.pseudo", 
+          "match": "\\b(endwhile)\\b"
+        }
+      ]
+    },
+    "syscalls": {
+      "patterns": [
+        {
+          "comment": "INIT statements",
+          "match": "\\b(INIT)\\s+(SYS_[A-Z_]+)\\s+(C\\d+)\\s+(\\d+)",
+          "captures": {
+            "1": {"name": "keyword.other.init.pseudo"},
+            "2": {"name": "entity.name.function.syscall.pseudo"},
+            "3": {"name": "constant.numeric.pseudo"},
+            "4": {"name": "constant.numeric.pseudo"}
+          }
+        },
+        {
+          "comment": "PARAM statements",
+          "begin": "\\b(PARAM)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s+\\(",
+          "beginCaptures": {
+            "1": { "name": "keyword.other.param.pseudo" },
+            "2": { "name": "variable.parameter.pseudo" }
+          },
+          "end": "\\)\\s*:\\s*(INT|PTR|STRUCT)(?:\\[(\\d+)\\])?(\\s*=)?",
+          "endCaptures": {
+            "1": { "name": "entity.name.type.pseudo" },
+            "2": { "name": "constant.numeric.pseudo" },
+            "3": { "name": "keyword.operator.assignment.pseudo" }
+          },
+          "patterns": [
+            {"include": "#cell-references"},
+            {"match": ",", "name": "punctuation.separator.parameter.pseudo"}
+          ]
+        },
+        {
+          "comment": "Syscall invocations",
+          "match": "\\b(SYS_[A-Z_]+)(?:\\s*\\(([^)]*)\\))?",
+          "captures": {
+            "1": {"name": "entity.name.function.syscall.pseudo"},
+            "2": {"name": "meta.function-call.pseudo"}
+          }
+        }
+      ]
+    },
+    "commands": {
+      "patterns": [
+        {
+          "name": "keyword.other.command.pseudo",
+          "match": "\\b(MOV|SET)\\b"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "comment": "Variable declarations with cell assignments",
+          "match": "^\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\s+\\(([^)]+)\\)(?:\\s*=\\s*(.*))?",
+          "captures": {
+            "1": {"name": "variable.other.declaration.pseudo"},
+            "2": {"name": "variable.other.cell.pseudo"},
+            "3": {"name": "constant.other.pseudo"}
+          }
+        },
+        {
+          "comment": "Variable references (but not SYS_ prefixed)",
+          "name": "variable.other.pseudo",
+          "match": "\\b(?!SYS_)[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "data-types": {
+      "patterns": [
+        {
+          "match": "\\b(INT|PTR|STRUCT)(?:\\[(\\d+)\\])?\\b",
+          "captures": {
+            "1": {"name": "entity.name.type.pseudo"},
+            "2": {"name": "constant.numeric.pseudo"}
+          }
+        }
+      ]
+    },
+    "cell-references": {
+      "patterns": [
+        {
+          "match": "\\b(C\\d+)(\\.\\.)?(C\\d+)?\\b",
+          "captures": {
+            "1": {"name": "constant.numeric.cell.pseudo"},
+            "2": {"name": "keyword.operator.range.pseudo"},
+            "3": {"name": "constant.numeric.cell.pseudo"}
+          }
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hex.pseudo",
+          "match": "\\b0x[0-9A-Fa-f]+\\b"
+        },
+        {
+          "name": "constant.numeric.pseudo",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.pseudo",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.pseudo",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.pseudo",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.pseudo",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "structures": {
+      "patterns": [
+        {
+          "name": "punctuation.definition.structure.begin.pseudo",
+          "match": "\\{"
+        },
+        {
+          "name": "punctuation.definition.structure.end.pseudo",
+          "match": "\\}"
+        },
+        {
+          "name": "punctuation.definition.array.begin.pseudo",
+          "match": "\\["
+        },
+        {
+          "name": "punctuation.definition.array.end.pseudo",
+          "match": "\\]"
+        },
+        {
+          "match": "([a-zA-Z_][a-zA-Z0-9_]*)(?:\\[(\\d+)\\])?\\s*:",
+          "captures": {
+            "1": {"name": "entity.name.tag.field.pseudo"},
+            "2": {"name": "constant.numeric.pseudo"}
+          }
+        },
+        {
+          "name": "punctuation.separator.comma.pseudo",
+          "match": ","
+        },
+        {
+          "name": "punctuation.definition.colon.pseudo",
+          "match": ":"
+        }
+      ]
+    }
+  }
 }

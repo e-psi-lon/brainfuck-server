@@ -2,7 +2,7 @@
   "name": "pseudo-code-syntax",
   "displayName": "Pseudo Code Syntax",
   "description": "Syntax highlighting and validation for Pseudo Code used in the Brainfuck server.",
-  "version": "0.2.6",
+  "version": "0.0.3",
   "publisher": "e-psi-lon",
   "engines": {
     "vscode": "^1.75.0"
@@ -38,11 +38,6 @@
         "command": "pseudo.validateFile",
         "title": "Validate Current File",
         "category": "Pseudo"
-      },
-      {
-        "command": "pseudo.exportToBrainfuck",
-        "title": "Export to Brainfuck (Template)",
-        "category": "Pseudo"
       }
     ],
     "menus": {
@@ -65,10 +60,6 @@
         },
         {
           "command": "pseudo.validateFile",
-          "when": "resourceExtname == .pseudo"
-        },
-        {
-          "command": "pseudo.exportToBrainfuck",
           "when": "resourceExtname == .pseudo"
         }
       ]
@@ -97,11 +88,6 @@
           "type": "boolean",
           "default": true,
           "description": "Show cell allocation conflicts in Problems panel"
-        },
-        "pseudo.export.includeComments": {
-          "type": "boolean",
-          "default": true,
-          "description": "Include comments in exported Brainfuck code"
         }
       }
     }
@@ -109,7 +95,8 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "vscode:export": "vsce package --allow-missing-repository"
   },
   "devDependencies": {
     "@types/vscode": "^1.75.0",

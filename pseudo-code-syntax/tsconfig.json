@@ -3,9 +3,16 @@
     "module": "commonjs",
     "target": "ES2020",
     "outDir": "out",
-    "lib": ["ES2020"],
+    "lib": ["ES2020", "DOM"],
     "sourceMap": true,
     "rootDir": "src",
-    "strict": true
-  }
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "declaration": true,
+    "declarationMap": true
+  },
+  "exclude": ["node_modules", "**/*.test.ts", "out"]
 }
