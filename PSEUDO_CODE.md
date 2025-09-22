@@ -1,10 +1,55 @@
-# Pseudo Code for Brainfuck Server
+# DSL for Brainfuck Server
 
 ## Introduction
 
-This document explains the pseudo code for the Brainfuck server in the [main.bf](main.bf) file. It provides a low-level, readable representation of the Brainfuck code.
+This document explains the DSL/pseudocode for the Brainfuck server in the [main.bf](main.bf) file. It provides a low-level, readable representation of the Brainfuck code.
 
-## Pseudo Code Syntax
+## DSL Syntax
+
+### Base syntax
+
+
+A newline is enough to indicate a new command. Semi-colons are not required and will be classed as invalid syntax. You can use indentation to make the code more readable, but it is not required. Comments are similar as Python. Everything after a `#` on a line is ignored.
+
+Variables are just labels for specific memory cells. See [Variables](#variables) for more details.
+
+To represents a Brainfuck memory cell, you should use `C` followed by a number (e.g., `C0`, `C1`, etc.).
+
+As this DSL represents Brainfuck code, conditional instruction and loops are very limited. Only while loop are supported and the condition is only a cell value. You can use them as so:
+```
+while C0:
+    # Do something
+    # Decrement C0 (or don't if you want an infinite loop)
+endwhile 
+```
+
+### Base commands
+
+This DSL provides a small set of basic commands for data manipulation, allowing for the minimal operations needed to implement essential logic. A creative use of them might be necessary to achieve more complex operations.
+
+- `MOV` : Move data between cells. Variable names can also be used.
+  - Example: `MOV C0 C1`
+- `SET` : Set a cell to a specific value. You can use a range (`Cs..Ce`) to set multiple cells at once.
+  - Example: `SET C0 42`
+  - Range Example: `SET C0..C4 0`
+
+### Variables
+
+Variables are simple labels for specific memory cells. They can represent single values, pointers, or complex structures. Here are the different ways to define variables:
+- **Single Value**: `variable (Cn) = value`
+  - Example: `my_variable (C0) = 42`
+- **Pointer**: `variable (Cn)`
+  - Example: `pointer_variable (C1)`
+- **Complex Structures**: `variable (Cs, Ce) = { field1: value1, field2: value2 }`
+  - Example:
+    ```
+    ### my_variable definition
+    my_variable (C2, C4) = {
+        field1: 10,
+        field2: 20,
+    }
+
+### Syscalls
 
 - **SYSCALLs**: Represented by `SYS_` prefixed functions with arguments in parentheses.
   - Example: `SYS_WRITE(C0, C1, C2)`
@@ -22,10 +67,7 @@ This document explains the pseudo code for the Brainfuck server in the [main.bf]
   - `SET`: Set a cell to a specific value. You can use a range (`Cs..Ce`) to set multiple cells at once.
     - Example: `SET C0 42`
     - Range Example: `SET C0..C4 0`
-
-- **Comments**: Use `#` for comments.
-  - Example: `# This is a comment`
-
+    
 - **Variables**:
   - Single Value: `variable (Cn) = value`
     - Example: `my_variable (C0) = 42`
