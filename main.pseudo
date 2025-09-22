@@ -2,7 +2,7 @@
 
 ## Setup socket
 
-INIT SYS_SOCKET AT C0 WITH 3
+INIT SYS_SOCKET C0 3
 
 PARAM AF_INET (C2, C4): INT =  0
 PARAM SOCK_STREAM (C5, C7): INT = 1
@@ -14,7 +14,7 @@ MOV C0 C4						# C0 is the socket file descriptor and C5
 socket_fd (C4)
 
 
-INIT SYS_SOCKET_OPT AT C0 WITH 4
+INIT SYS_SOCKET_OPT C0 4
 
 PARAM SOL_SOCKET (C5, C7): INT = 1
 PARAM SO_REUSEADDR (C8, C10): INT = 2
@@ -25,7 +25,7 @@ SYS_SOCKET_OPT(socket_fd, SOL_SOCKET, SO_REUSEADDR, option_value, option_size)
 
 ## Bind the socket
 
-INIT SYS_BIND AT C0 WITH 3
+INIT SYS_BIND C0 3
 
 ### sockaddr definition
 PARAM sockaddr (C5, C7..C22): STRUCT[16] = {
@@ -59,12 +59,11 @@ socket_fd (C5)
 SET C0 1						# Use C0 to create a non-zero value for the loop condition
 
 PARAM backlog (C6, C8): INT = 2		# Number of connections to queue
+INIT SYS_LISTEN C1 2
+
+SYS_LISTEN(socket_fd, backlog)			# Start listening on the socket
 
 while:							# Start the loop
-	INIT SYS_LISTEN AT C1 WITH 2
-
-
-	SYS_LISTEN(socket_fd, backlog)			# Start listening on the socket
 
 endwhile
 
